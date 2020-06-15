@@ -1,2 +1,2 @@
-class InvalidPostId(Exception):
+class DomainDoesNotExist(Exception):
     pass
