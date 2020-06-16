@@ -3,7 +3,7 @@ Created on 11/06/20
 
 @author: revanth
 """
-from gyaan.exceptions.exceptions import UserNotDomainMember
+from gyaan.exceptions.exceptions import UserNotDomainMember, DomainDoesNotExist
 from gyaan.interactors.presenters.presenter_interface import PresenterInterface
 from gyaan.interactors.storages.storage_interface import StorageInterface
 
@@ -18,7 +18,7 @@ class DomainPostsInteractor:
                                  presenter: PresenterInterface):
 
         try:
-            self._get_domain_posts_response(
+            return self._get_domain_posts_response(
                 user_id=user_id,
                 domain_id=domain_id,
                 offset=offset,
@@ -27,7 +27,8 @@ class DomainPostsInteractor:
             )
         except UserNotDomainMember:
             presenter.raise_user_not_domain_member_exception()
-        pass
+        except DomainDoesNotExist:
+            presenter.raise_domain_does_not_exist_exception()
 
     def _get_domain_posts_response(self, user_id: int, domain_id: int,
                                    offset: int, limit: int,
@@ -42,6 +43,7 @@ class DomainPostsInteractor:
 
     def get_domain_posts(self, user_id: int, domain_id: int,
                          offset: int, limit: int):
+        self.storage.is_valid_domain_id(domain_id)
 
         is_user_domain_follower = self.storage.is_user_following_domain(
             user_id=user_id,

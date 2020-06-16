@@ -11,6 +11,10 @@ from gyaan.interactors.storages.dtos import DomainDTO, DomainStatsDTO, \
 class StorageInterface(ABC):
 
     @abstractmethod
+    def is_valid_domain_id(self, domain_id: int):
+        pass
+
+    @abstractmethod
     def get_domain(self, domain_id: int) -> DomainDTO:
         pass
 
